@@ -1,0 +1,301 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "SF Mono", "Menlo", "Consolas", monospace;
+  font-size: 13px;
+  line-height: 1.6;
+  background: #fff;
+  color: #111;
+  padding: 24px 32px;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+h1 {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 4px;
+  letter-spacing: -0.3px;
+}
+
+.subtitle {
+  font-size: 11px;
+  color: #666;
+  margin-bottom: 24px;
+}
+
+/* Tabs */
+.tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid #111;
+  margin-bottom: 24px;
+}
+
+.tab {
+  padding: 6px 16px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  border-bottom: none;
+  font-family: inherit;
+  font-size: 12px;
+  background: none;
+  color: #666;
+}
+
+.tab:hover {
+  color: #111;
+}
+
+.tab.active {
+  border-color: #111;
+  color: #111;
+  background: #fff;
+  position: relative;
+  top: 1px;
+}
+
+/* Sections */
+.section {
+  display: none;
+}
+
+.section.active {
+  display: block;
+}
+
+/* Form elements */
+label {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+  color: #444;
+}
+
+input, select, textarea {
+  font-family: inherit;
+  font-size: 13px;
+  padding: 6px 8px;
+  border: 1px solid #ccc;
+  width: 100%;
+  margin-bottom: 12px;
+  background: #fff;
+  color: #111;
+}
+
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: #111;
+}
+
+textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
+.row {
+  display: flex;
+  gap: 12px;
+}
+
+.row > * {
+  flex: 1;
+}
+
+button {
+  font-family: inherit;
+  font-size: 12px;
+  padding: 6px 16px;
+  border: 1px solid #111;
+  background: #fff;
+  color: #111;
+  cursor: pointer;
+  margin-right: 8px;
+  margin-bottom: 8px;
+}
+
+button:hover {
+  background: #111;
+  color: #fff;
+}
+
+button:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+button:disabled:hover {
+  background: #fff;
+  color: #111;
+}
+
+button.primary {
+  background: #111;
+  color: #fff;
+}
+
+button.primary:hover {
+  background: #333;
+}
+
+/* Agent log */
+.log-container {
+  border: 1px solid #ddd;
+  margin: 16px 0;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.log-entry {
+  padding: 4px 10px;
+  border-bottom: 1px solid #eee;
+  font-size: 12px;
+}
+
+.log-entry:last-child {
+  border-bottom: none;
+}
+
+.log-agent {
+  font-weight: 600;
+  margin-right: 8px;
+}
+
+/* Output panels */
+.panel {
+  border: 1px solid #ddd;
+  margin: 16px 0;
+}
+
+.panel-header {
+  padding: 6px 10px;
+  border-bottom: 1px solid #ddd;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  background: #fafafa;
+}
+
+.panel-body {
+  padding: 10px;
+  font-size: 12px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+/* Verdict badges */
+.verdict {
+  display: inline-block;
+  padding: 1px 8px;
+  font-size: 11px;
+  font-weight: 600;
+  border: 1px solid #111;
+}
+
+.verdict.pass {
+  color: #111;
+}
+
+.verdict.fail {
+  border-style: dashed;
+}
+
+/* Approval bar */
+.approval-bar {
+  padding: 12px 0;
+  border-top: 1px solid #ddd;
+  margin-top: 16px;
+}
+
+/* Status */
+.status {
+  font-size: 11px;
+  color: #666;
+  margin: 8px 0;
+}
+
+/* Loading */
+.loading {
+  display: inline-block;
+  font-size: 12px;
+  color: #666;
+}
+
+.loading::after {
+  content: "...";
+  animation: dots 1.5s steps(3, end) infinite;
+}
+
+@keyframes dots {
+  0%, 20% { content: "."; }
+  40% { content: ".."; }
+  60%, 100% { content: "..."; }
+}
+
+/* Diff display */
+.diff-line-add {
+  background: #f0f0f0;
+}
+
+.diff-line-del {
+  text-decoration: line-through;
+  color: #888;
+}
+
+/* Check list */
+.check-item {
+  padding: 3px 0;
+  font-size: 12px;
+}
+
+.check-pass::before {
+  content: "[ok] ";
+  font-weight: 600;
+}
+
+.check-fail::before {
+  content: "[!!] ";
+  font-weight: 600;
+}
+
+/* Markdown-ish rendering in panels */
+.rendered h1, .rendered h2, .rendered h3 {
+  font-size: 13px;
+  font-weight: 600;
+  margin: 8px 0 4px;
+}
+
+.rendered p {
+  margin-bottom: 6px;
+}
+
+.rendered ul, .rendered ol {
+  margin-left: 16px;
+  margin-bottom: 6px;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid #ddd;
+  margin: 16px 0;
+}
+
+.hidden {
+  display: none;
+}
+
+.config-bar {
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #eee;
+}

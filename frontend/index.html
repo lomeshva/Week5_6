@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GitHub Agent</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <h1>GitHub Repository Agent</h1>
+  <p class="subtitle">Multi-agent system: Reviewer, Planner, Writer, Gatekeeper</p>
+
+  <!-- Config -->
+  <div class="config-bar">
+    <label>Repository Path</label>
+    <input type="text" id="repo-path" placeholder="/absolute/path/to/your/repo" value="">
+    <div id="repo-info" class="status"></div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <button class="tab active" data-section="review">Review Changes</button>
+    <button class="tab" data-section="draft">Draft Issue / PR</button>
+    <button class="tab" data-section="improve">Improve Existing</button>
+  </div>
+
+  <!-- Section 1: Review -->
+  <div id="section-review" class="section active">
+    <div class="row">
+      <div>
+        <label>Base Branch</label>
+        <input type="text" id="review-base" placeholder="main">
+      </div>
+      <div>
+        <label>Commit Range (optional)</label>
+        <input type="text" id="review-range" placeholder="HEAD~3..HEAD">
+      </div>
+    </div>
+    <button id="btn-review" class="primary">Run Review</button>
+
+    <div id="review-log" class="log-container"></div>
+    <div id="review-output"></div>
+  </div>
+
+  <!-- Section 2: Draft -->
+  <div id="section-draft" class="section">
+    <div class="row">
+      <div>
+        <label>Type</label>
+        <select id="draft-type">
+          <option value="issue">Issue</option>
+          <option value="pr">Pull Request</option>
+        </select>
+      </div>
+      <div>
+        <label>Instruction</label>
+        <input type="text" id="draft-instruction" placeholder="e.g. Add rate limiting to login endpoint">
+      </div>
+    </div>
+    <button id="btn-draft" class="primary">Create Draft</button>
+
+    <div id="draft-log" class="log-container"></div>
+    <div id="draft-output"></div>
+
+    <div id="draft-approval" class="approval-bar hidden">
+      <strong>Approve this draft?</strong>
+      <button id="btn-approve" class="primary">Approve &amp; Create</button>
+      <button id="btn-reject">Reject</button>
+    </div>
+    <div id="draft-result"></div>
+  </div>
+
+  <!-- Section 3: Improve -->
+  <div id="section-improve" class="section">
+    <div class="row">
+      <div>
+        <label>Type</label>
+        <select id="improve-type">
+          <option value="issue">Issue</option>
+          <option value="pr">Pull Request</option>
+        </select>
+      </div>
+      <div>
+        <label>Number</label>
+        <input type="number" id="improve-number" placeholder="42">
+      </div>
+    </div>
+    <button id="btn-improve" class="primary">Analyze &amp; Improve</button>
+
+    <div id="improve-log" class="log-container"></div>
+    <div id="improve-output"></div>
+
+    <div id="improve-approval" class="approval-bar hidden">
+      <strong>Apply this improvement?</strong>
+      <button id="btn-improve-approve" class="primary">Apply to GitHub</button>
+      <button id="btn-improve-reject">Reject</button>
+    </div>
+    <div id="improve-result"></div>
+  </div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
