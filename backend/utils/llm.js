@@ -4,10 +4,9 @@ let client = null;
 
 function getClient() {
   if (!client) {
-    // Ollama exposes an OpenAI-compatible API at localhost:11434
     client = new OpenAI({
       baseURL: process.env.OLLAMA_URL || "http://localhost:11434/v1",
-      apiKey: "ollama", // Ollama doesn't need a real key but the library requires one
+      apiKey: "ollama",
     });
   }
   return client;
@@ -29,22 +28,47 @@ async function llmCall(systemPrompt, userPrompt, options = {}) {
   return resp.choices[0].message.content;
 }
 
-async function llmJSON(systemPrompt, userPrompt, options = {}) {
-  const raw = await llmCall(
-    systemPrompt +
-      "\n\nIMPORTANT: Respond ONLY with valid JSON. No markdown fences, no preamble, no explanation. Just the JSON object.",
-    userPrompt,
-    { ...options, temperature: 0.1 }
+function fixJSON(raw) {
+  let s = raw.replace(/```json\s*/g, "").replace(/```\s*/g, "").trim();
+  const start = s.indexOf("{");
+  const end = s.lastIndexOf("}");
+  if (start === -1 || end === -1) throw new Error("No JSON object found");
+  s = s.substring(start, end + 1);
+  s = s.replace(/,\s*([}\]])/g, "$1");
+  s = s.replace(/[\x00-\x1F\x7F]/g, (ch) =>
+    ch === "\n" || ch === "\r" || ch === "\t" ? ch : ""
   );
-  // Strip any accidental markdown fences or text before/after JSON
-  let cleaned = raw.replace(/```json\s*/g, "").replace(/```\s*/g, "").trim();
-  // Find the first { and last } to extract JSON even if there's surrounding text
-  const start = cleaned.indexOf("{");
-  const end = cleaned.lastIndexOf("}");
-  if (start !== -1 && end !== -1) {
-    cleaned = cleaned.substring(start, end + 1);
+  s = s.replace(/\\\n/g, "\\n");
+  return s;
+}
+
+async function llmJSON(systemPrompt, userPrompt, options = {}) {
+  const maxRetries = 3;
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    const raw = await llmCall(
+      systemPrompt +
+      "\n\nCRITICAL: Respond with ONLY a valid JSON object. No markdown, no explanation. Start with { and end with }. No trailing commas.",
+      userPrompt,
+      { ...options, temperature: attempt === 1 ? 0.1 : 0.05 }
+    );
+    try {
+      return JSON.parse(fixJSON(raw));
+    } catch (err) {
+      console.error(`[LLM] JSON parse fail (attempt ${attempt}/${maxRetries}):`, err.message);
+      if (attempt === maxRetries) {
+        try {
+          const fixRaw = await llmCall(
+            "You are a JSON fixer. Return ONLY the fixed valid JSON. Nothing else.",
+            "Fix this JSON:\n" + raw,
+            { temperature: 0 }
+          );
+          return JSON.parse(fixJSON(fixRaw));
+        } catch {
+          throw new Error("LLM returned invalid JSON after " + maxRetries + " attempts");
+        }
+      }
+    }
   }
-  return JSON.parse(cleaned);
 }
 
 module.exports = { llmCall, llmJSON };

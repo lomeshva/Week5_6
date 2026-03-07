@@ -165,3 +165,5 @@ Pros: Focused prompts, clearer audit trail, the Gatekeeper can catch Writer mist
 Cons: More latency (4 sequential LLM calls for a full pipeline), more complex error handling, harder to debug when agents disagree.
 
 A key design choice: agents communicate through structured JSON, not free text. This makes the pipeline reliable but means agents can't have nuanced "conversations" with each other.
+
+<!-- test -->
