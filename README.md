@@ -167,3 +167,5 @@ Cons: More latency (4 sequential LLM calls for a full pipeline), more complex er
 A key design choice: agents communicate through structured JSON, not free text. This makes the pipeline reliable but means agents can't have nuanced "conversations" with each other.
 
 <!-- test -->
+
+Agent test change for n8n workflow
